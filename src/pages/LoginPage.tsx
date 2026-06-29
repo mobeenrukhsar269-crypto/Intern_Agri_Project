@@ -1,3 +1,5 @@
+import { useNavigate } from 'react-router-dom'
+import { useAuth } from '../context/AuthContext'
 import { useState } from 'react'
 import { Eye, EyeOff } from 'lucide-react'
 
@@ -9,15 +11,18 @@ export default function LoginPage() {
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const { login, register } = useAuth()
+  const navigate = useNavigate()
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
-    if (mode === 'login') {
-      console.log('Logging in with:', email, password)
-    } else {
-      console.log('Registering:', name, email, password)
-    }
+  const handleSubmit = async (e: React.FormEvent) => {
+  e.preventDefault()
+  if (mode === 'login') {
+    await login(email, password)
+  } else {
+    await register(name, email, password)
   }
+  navigate('/dashboard')
+}
 
   return (
     <div className="min-h-screen bg-gray-50 flex items-center justify-center px-4">
